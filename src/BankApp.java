@@ -56,7 +56,6 @@ public class BankApp extends JFrame implements ActionListener {
         layoutConstraints.gridwidth = 2;
         add(bankBalance, layoutConstraints);
         bankBalance.setHorizontalAlignment(SwingConstants.CENTER);
-        System.out.println(javax.swing.UIManager.getDefaults().getFont("Label.font"));
         bankBalance.setFont(new Font("Dialog", Font.PLAIN, 20));
 
     }
