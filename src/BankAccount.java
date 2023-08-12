@@ -1,5 +1,6 @@
-/* All attributes are private and each have getters and setters.
- *  There is also an accountSummary method which prints out each of the attributes in a formatted manner.*/
+/*
+    This class holds the methods used to manage the bank account balance in the BankApp application.
+*/
 
 public class BankAccount {
     private double balance;

@@ -1,3 +1,7 @@
+/*
+    This class holds all the functionality for building up the application window as well as handling ActionListeners
+    for buttons.
+ */
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -5,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class BankApp extends JFrame implements ActionListener {
+    InputValidator bankTeller = new InputValidator(this);
+    String initialBalance;
     BankAccount account;
     JLabel bankBalance;
 
@@ -46,7 +52,11 @@ public class BankApp extends JFrame implements ActionListener {
 
         buildWithdrawalPanelComponents();
 
-        account = new BankAccount(Double.parseDouble(JOptionPane.showInputDialog("Please input your initial bank account balance.")));
+        do {
+            initialBalance = JOptionPane.showInputDialog("Please input your initial bank account balance.");
+        } while (!bankTeller.validateInput(initialBalance));
+
+        account = new BankAccount(Double.parseDouble(initialBalance));
         bankBalance = new JLabel(String.format("Your bank account balance is: $%.2f", account.getBalance()));
 
         layoutConstraints.gridx = 0;
@@ -60,8 +70,9 @@ public class BankApp extends JFrame implements ActionListener {
 
     }
 
+    //Felt it was better organized to split up the deposit panel and withdrawal panel components into their own methods.
     private void buildDepositPanelComponents(){
-        depositLabel = new JLabel("PLease enter in the amount you would want to deposit to your account.");
+        depositLabel = new JLabel("Please enter in the amount you would want to deposit to your account.");
         depositField = new JTextField(6);
         processDeposit = new JButton("Process Deposit");
 
@@ -104,21 +115,21 @@ public class BankApp extends JFrame implements ActionListener {
         processWithdrawal.addActionListener(this);
     }
 
+    // Contains the actions performed based on which button is pressed. Also contains validation for textField input.
     @Override
     public void actionPerformed(ActionEvent e) {
+        InputValidator bankTeller = new InputValidator(this);
         JButton sourceEvent = (JButton) e.getSource();
 
-        if (sourceEvent == processDeposit){
+        if (sourceEvent == processDeposit && bankTeller.validateInput(depositField.getText())){
             account.deposit(Double.parseDouble(depositField.getText()));
             depositField.setText("");
         }
-        else if (sourceEvent == processWithdrawal){
+        else if (sourceEvent == processWithdrawal && bankTeller.validateInput(withdrawalField.getText())){
             account.withdrawal(Double.parseDouble(withdrawalField.getText()));
             withdrawalField.setText("");
         }
 
         bankBalance.setText(String.format("Your bank account balance is: $%.2f", account.getBalance()));
     }
-
-
 }
